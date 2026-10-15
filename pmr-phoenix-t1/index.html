@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FTC 23430 // PMR Phoenix — Night Fury</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
+  
+  <!-- Modern Google Fonts: Syne (Ultra Display) + Plus Jakarta Sans (Clean Tech Body) + JetBrains Mono (Technical HUD) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- 3D Three.js Preload -->
+  <link rel="preload" as="fetch" type="model/gltf-binary" href="assets/models/robot_web.glb" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body id="t1-body">
+
+  <!-- Scroll Progress Indicator Bar -->
+  <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
+
+  <!-- Nanotech Ambient Glows -->
+  <div class="ambient-glow ambient-glow--top" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--mid" aria-hidden="true"></div>
+
+  <!-- Cybernetic Grid Backdrop -->
+  <div class="grid-backdrop" aria-hidden="true"></div>
+
+  <!-- Floating Island Navbar -->
+  <header id="main-nav" class="nav-island">
+    <div class="nav-island__inner">
+      <a href="#cad-hero" class="nav-brand">
+        <img src="assets/images/logo.png" alt="PMR Phoenix Logo" class="nav-brand__logo">
+        <div class="nav-brand__meta">
+          <span class="nav-brand__title">PMR PHOENIX</span>
+          <span class="nav-brand__subtitle">FTC 23430</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#cad-hero" class="nav-link"><span class="nav-link__num">01</span> 3D Model</a>
+        <a href="#brand-reveal" class="nav-link"><span class="nav-link__num">02</span> About</a>
+        <a href="#team-photo-feature" class="nav-link"><span class="nav-link__num">03</span> Team</a>
+        <a href="#team-track" class="nav-link"><span class="nav-link__num">04</span> Roster</a>
+        <a href="#bot-showcase" class="nav-link"><span class="nav-link__num">05</span> Night Fury</a>
+        <a href="#highlights" class="nav-link"><span class="nav-link__num">06</span> Match Play</a>
+        <a href="#contact" class="nav-link"><span class="nav-link__num">07</span> Connect</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="scroll-badge">
+          <span class="scroll-badge__dot"></span>
+          <span id="scroll-percent">0%</span>
+        </div>
+        <button type="button" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-drawer" class="mobile-drawer">
+    <div class="mobile-drawer__links">
+      <a href="#cad-hero">01 // 3D CAD MODEL</a>
+      <a href="#brand-reveal">02 // PMR PHOENIX 23430</a>
+      <a href="#team-photo-feature">03 // TEAM PHOTOGRAPHY</a>
+      <a href="#team-track">04 // CREW ROSTER</a>
+      <a href="#bot-showcase">05 // NIGHT FURY</a>
+      <a href="#highlights">06 // MATCH RECORD</a>
+      <a href="#contact">07 // CONTACT &amp; SOCIAL</a>
+      <a href="#contact" class="mobile-drawer__btn">Get In Touch</a>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SCENE 1: PURE UNOBSTRUCTED 3D CAD VIEWER
+       "main screen is just straight shown with the cad thing, nothing blocking it"
+       ========================================================================== -->
+  <section id="cad-hero" class="pure-cad-section">
+    <!-- Unobstructed Three.js 3D Model Viewer -->
+    <div
+      class="robot-viewer full-screen-viewer"
+      id="hero-cad-viewer"
+      data-model="assets/models/robot_web.glb"
+      data-auto-rotate-speed="0.85"
+      data-scroll-rotate="true"
+    ></div>
+
+    <!-- Minimal Nanotech HUD Corner Telemetry (Unobtrusive) -->
+    <div class="cad-hud cad-hud--top-left">
+      <div class="hud-pill">
+        <span class="hud-status-led"></span>
+        <span class="hud-label">NIGHT FURY V3 // 3D NANO-MESH</span>
+      </div>
+      <div class="hud-sub">11,000 DENSITY POINTS &bull; CAD Z-AXIS LEVEL</div>
+    </div>
+
+    <div class="cad-hud cad-hud--top-right">
+      <div class="hud-mono-tag">[ 49.2827° N, 122.8490° W ]</div>
+      <div class="hud-sub">PORT MOODY SECONDARY &bull; BC, CANADA</div>
+    </div>
+
+    <div class="cad-hud cad-hud--bottom-left">
+      <div class="hud-control-tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M3.6 9h16.8"/>
+          <path d="M3.6 15h16.8"/>
+          <path d="M11.5 3a17 17 0 0 0 0 18"/>
+          <path d="M12.5 3a17 17 0 0 1 0 18"/>
+        </svg>
+        <span>CLICK &amp; DRAG TO ROTATE &bull; HOVER TO DEFLECT NANO-PARTICLES</span>
+      </div>
+    </div>
+
+    <!-- Scroll Cue to enter next scene -->
+    <div class="cad-hud cad-hud--bottom-center">
+      <a href="#brand-reveal" class="cad-scroll-prompt">
+        <span class="prompt-text">SCROLL TO COMMENCE</span>
+        <div class="nanotech-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M12 4v16m0 0l-6-6m6 6l6-6"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SCENE 2: "then it goes to PMR Phoenix 23430"
+       Kinetic Nanotech Typographic Statement
+       ========================================================================== -->
+  <section id="brand-reveal" class="brand-reveal-section">
+    <!-- Nanotech scan line crossing background -->
+    <div class="brand-radar-grid" aria-hidden="true"></div>
+
+    <div class="section-container">
+      <div class="brand-box" id="brand-box">
+        <!-- Top Status Tag -->
+        <div class="brand-status-pill reveal-item">
+          <span class="pulse-dot"></span>
+          <span class="status-mono">FIRST TECH CHALLENGE &bull; CLASSIFICATION 23430</span>
+        </div>
+
+        <!-- Monolithic Brand Lockup -->
+        <div class="brand-monolith-lockup reveal-item">
+          <div class="brand-title-wrap">
+            <span class="brand-word">PMR</span>
+            <span class="brand-word brand-word--gold">PHOENIX</span>
+          </div>
+          
+          <div class="brand-number-hero-wrap">
+            <span class="brand-giant-number">23430</span>
+          </div>
+        </div>
+
+        <!-- Clean Editorial Spec Ribbon -->
+        <div class="brand-sub-spec-row reveal-item">
+          <span class="spec-chip">TEAM 1</span>
+          <span class="spec-dot">&bull;</span>
+          <span class="spec-chip">NIGHT FURY V3</span>
+          <span class="spec-dot">&bull;</span>
+          <span class="spec-chip">BC RECORD ALLIANCE</span>
+          <span class="spec-dot">&bull;</span>
+          <span class="spec-chip">18-BALL AUTO</span>
+        </div>
+
+        <div class="brand-lead-line reveal-item">
+          <span class="lead-bar"></span>
+          <p class="brand-lead-text">
+            Home of the #1 public school FIRST Tech Challenge team in Canada. 
+            Engineered, fabricated, and programmed by students in Port Moody, British Columbia.
+          </p>
+        </div>
+
+        <!-- 4 Nanotech Stats Boxes with Cybernetic Entrance -->
+        <div class="nanotech-stats-grid reveal-item" id="nano-stats-grid">
+          <div class="nano-stat-cell" data-stat-cell="0" data-tilt>
+            <div class="cell-laser-border" aria-hidden="true"></div>
+            <div class="cell-cyber-bracket tl"></div>
+            <div class="cell-cyber-bracket br"></div>
+            <div class="cell-hud-top">
+              <span class="cell-code">SYS.01 // CYCLE</span>
+              <span class="cell-status">ACTIVE</span>
+            </div>
+            <span class="nano-stat-num" data-target="3.0">&lt; 3.0S</span>
+            <span class="nano-stat-label">CYCLE VELOCITY</span>
+          </div>
+
+          <div class="nano-stat-cell" data-stat-cell="1" data-tilt>
+            <div class="cell-laser-border" aria-hidden="true"></div>
+            <div class="cell-cyber-bracket tl"></div>
+            <div class="cell-cyber-bracket br"></div>
+            <div class="cell-hud-top">
+              <span class="cell-code">SYS.02 // AUTO</span>
+              <span class="cell-status">LOCKED</span>
+            </div>
+            <span class="nano-stat-num" data-target="18">18 BALLS</span>
+            <span class="nano-stat-label">AUTONOMOUS DELIVERY</span>
+          </div>
+
+          <div class="nano-stat-cell" data-stat-cell="2" data-tilt>
+            <div class="cell-laser-border" aria-hidden="true"></div>
+            <div class="cell-cyber-bracket tl"></div>
+            <div class="cell-cyber-bracket br"></div>
+            <div class="cell-hud-top">
+              <span class="cell-code">SYS.03 // TARGET</span>
+              <span class="cell-status">CALIBRATED</span>
+            </div>
+            <span class="nano-stat-num" data-target="90.0">90.0%</span>
+            <span class="nano-stat-label">FIELD ACCURACY</span>
+          </div>
+
+          <div class="nano-stat-cell" data-stat-cell="3" data-tilt>
+            <div class="cell-laser-border" aria-hidden="true"></div>
+            <div class="cell-cyber-bracket tl"></div>
+            <div class="cell-cyber-bracket br"></div>
+            <div class="cell-hud-top">
+              <span class="cell-code">SYS.04 // RECORD</span>
+              <span class="cell-status">VERIFIED</span>
+            </div>
+            <span class="nano-stat-num">BC #1</span>
+            <span class="nano-stat-label">RECORD ALLIANCE SCORE</span>
+          </div>
+        </div>
+
+        <div class="brand-actions reveal-item">
+          <a href="#team-photo-feature" class="btn btn--primary">
+            <span>Explore Team Photo</span>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+              <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          <a href="#team-track" class="btn btn--glass">
+            <span>Meet Team 1 Roster</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SCENE 3: "then scroll effects to the big team photo"
+       Cinematic Nanotech Team Photo Feature
+       ========================================================================== -->
+  <section id="team-photo-feature" class="team-photo-section">
+    <div class="section-container">
+      <div class="team-photo-header scroll-reveal">
+        <p class="section-eyebrow">CHAMPIONSHIP ALLIANCE // TEAM 1</p>
+        <h2 class="section-title">The Faces Behind <span class="text-gradient">The Metal</span></h2>
+        <p class="section-subtitle">
+          Port Moody Robotics Team 23430 celebrated at tournament with their championship awards and the Night Fury robot.
+        </p>
+      </div>
+
+      <!-- Nanotech Framed Parallax Photo -->
+      <div class="team-photo-frame-wrap scroll-reveal">
+        <div class="photo-glow-border" aria-hidden="true"></div>
+        <div class="team-photo-frame" data-tilt>
+          <div class="nano-scanline" aria-hidden="true"></div>
+          
+          <img
+            id="parallax-team-photo"
+            src="assets/images/team-medals.png"
+            alt="Port Moody Robotics Team 1 with medals and robot 23430"
+            class="team-photo-hero-img"
+          >
+
+          <!-- Nanotech HUD Overlays -->
+          <div class="nano-corner nano-corner--tl"></div>
+          <div class="nano-corner nano-corner--tr"></div>
+          <div class="nano-corner nano-corner--bl"></div>
+          <div class="nano-corner nano-corner--br"></div>
+
+          <div class="photo-meta-hud">
+            <span class="hud-chip">TEAM 1 &bull; 23430</span>
+            <span class="hud-desc">FIRST TECH CHALLENGE ALLIANCE HONORS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SCENE 4: "then each scroll opens a new member and their description"
+       Pinned Sticky Scroll Roster (No Made Up Quotes — Authentic Descriptions)
+       ========================================================================== -->
+  <section id="team-track" class="team-scroll-container">
+    <div id="team-scroll-track" class="team-scroll-track">
+      <div class="team-sticky-stage">
+        
+        <!-- Header Info -->
+        <div class="team-stage-header">
+          <div class="team-eyebrow">
+            <span class="pill-accent">ROSTER 2025–26</span>
+            <span class="team-eyebrow__line"></span>
+            <span class="team-eyebrow__meta">FTC 23430 // STUDENT CREW</span>
+          </div>
+          <div class="team-counter">
+            <span id="active-member-index" class="counter-num">01</span>
+            <span class="counter-slash">/</span>
+            <span id="active-member-total" class="counter-total">08</span>
+          </div>
+        </div>
+
+        <!-- Main Dynamic Member Stage -->
+        <div class="team-member-layout">
+
+          <!-- Left Column: Visual Photo Hologram Card -->
+          <div class="member-visual-col">
+            <div class="member-frame-glow" aria-hidden="true"></div>
+            <div class="member-photo-frame" data-tilt>
+              <div class="photo-scanline" aria-hidden="true"></div>
+              <div class="photo-badge">
+                <span id="active-member-dept">Leadership</span>
+              </div>
+              <img
+                id="active-member-photo"
+                src="assets/images/team/team-lead.png"
+                alt="Active Team Member"
+                class="member-photo-img"
+              >
+              <div class="member-photo-overlay">
+                <div class="corner corner-tl"></div>
+                <div class="corner corner-tr"></div>
+                <div class="corner corner-bl"></div>
+                <div class="corner corner-br"></div>
+              </div>
+            </div>
+
+            <!-- Scrubber Navigation Dots -->
+            <div class="scrubber-bar">
+              <span class="scrubber-label">SCROLL INDEX:</span>
+              <div id="team-scrubber-dots" class="scrubber-dots"></div>
+            </div>
+          </div>
+
+          <!-- Right Column: Member Details (No Quotes — Authentic Descriptions) -->
+          <div class="member-info-col" id="team-active-card">
+            <div class="member-role-badge">
+              <span class="role-pulse"></span>
+              <span id="active-member-role">Team Lead</span>
+            </div>
+
+            <h2 id="active-member-name" class="member-name">Arav</h2>
+
+            <p id="active-member-bio" class="member-bio">
+              Leads PMR Phoenix from the front — sets the direction and keeps every sub-team pulling toward the same goal.
+            </p>
+
+            <div class="member-spec-box">
+              <span class="spec-label">DOMAIN FOCUS</span>
+              <div id="active-member-tags" class="member-tags">
+                <span class="member-tag">Systems Direction</span>
+                <span class="member-tag">Team Strategy</span>
+                <span class="member-tag">Competition Lead</span>
+              </div>
+            </div>
+
+            <div class="member-instruction-cue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+              </svg>
+              <span>Scroll to reveal next team member</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Jump Timeline Strip -->
+        <div class="team-timeline-strip">
+          <span class="timeline-hint">SELECT CREW:</span>
+          <div id="team-timeline-chips" class="timeline-chips"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SCENE 5: "then the picture of bot and the highlight videos"
+       Night Fury Hardware Anatomy & Specs (No Emojis)
+       ========================================================================== -->
+  <section id="bot-showcase" class="bot-showcase-section">
+    <div class="section-container">
+      <div class="section-header scroll-reveal">
+        <p class="section-eyebrow">ROBOT ARCHITECTURE // SPEC V3</p>
+        <h2 class="section-title">The Machine: <span class="text-gradient">Night Fury</span></h2>
+        <p class="section-subtitle">
+          Night Fury is PMR Phoenix's DECODE robot, built around one core philosophy: speed wins. 
+          Carbon-fibre chassis, gecko-wheel intake transfer, and precision dual-flywheel turret.
+        </p>
+      </div>
+
+      <!-- Bot Showcase Media Grid (Kinetic Dual-Gate Entrance) -->
+      <div class="bot-media-grid" id="bot-cards-grid">
+        <div class="bot-card bot-card--left" data-tilt>
+          <div class="bot-card__image-wrap">
+            <div class="card-laser-scanner" aria-hidden="true"></div>
+            <img src="assets/images/robots/phoenix.png" alt="FTC 23430 Night Fury robot chassis" class="bot-card__img">
+            <div class="bot-card__tag">HARDWARE SPEC V3</div>
+          </div>
+          <div class="bot-card__content">
+            <h3 class="bot-card__title">Competition Chassis</h3>
+            <p class="bot-card__text">
+              Custom carbon-fibre plates, high-speed 4-motor belted drivetrain, and low-center-of-gravity electronics layout.
+            </p>
+          </div>
+        </div>
+
+        <div class="bot-card bot-card--right" data-tilt>
+          <div class="bot-card__image-wrap">
+            <div class="card-laser-scanner" aria-hidden="true"></div>
+            <img src="assets/images/team-medals.png" alt="PMR Phoenix 23430 team with robot" class="bot-card__img">
+            <div class="bot-card__tag">QUALIFIER RECORD</div>
+          </div>
+          <div class="bot-card__content">
+            <h3 class="bot-card__title">Tournament Proven</h3>
+            <p class="bot-card__text">
+              Earned Design, Think, and Innovate Awards while setting the provincial scoring record for British Columbia.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Technical Pillars (Converging 3D Nanotech Cards) -->
+      <div class="innovations-grid" id="innovations-grid">
+        <div class="inno-card" data-inno-index="0" data-tilt>
+          <div class="inno-laser-edge" aria-hidden="true"></div>
+          <div class="inno-bracket tl"></div>
+          <div class="inno-bracket br"></div>
+          <div class="inno-hud-header">
+            <span class="inno-code">SPEC.01 // RAPID CYCLE</span>
+            <span class="inno-tag-pill">27S &rarr; &lt;3S</span>
+          </div>
+          <div class="inno-card__icon-svg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+              <circle cx="12" cy="13" r="8"/>
+              <path d="M12 9v4l2.5 2.5"/>
+              <path d="M9 2h6M12 2v2"/>
+            </svg>
+          </div>
+          <h4 class="inno-card__title">Sub-3s Cycle Times</h4>
+          <p class="inno-card__text">
+            Cycle time reduced from 27 seconds to under 3 seconds across four generations of rapid physical iteration.
+          </p>
+          <div class="inno-metric-bar">
+            <span class="metric-label">SPEED GAIN</span>
+            <span class="metric-val">+900% FASTER</span>
+          </div>
+        </div>
+
+        <div class="inno-card" data-inno-index="1" data-tilt>
+          <div class="inno-laser-edge" aria-hidden="true"></div>
+          <div class="inno-bracket tl"></div>
+          <div class="inno-bracket br"></div>
+          <div class="inno-hud-header">
+            <span class="inno-code">SPEC.02 // AUTONOMOUS</span>
+            <span class="inno-tag-pill">18-BALL PATH</span>
+          </div>
+          <div class="inno-card__icon-svg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+              <circle cx="12" cy="12" r="9"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <h4 class="inno-card__title">18-Ball Autonomous</h4>
+          <p class="inno-card__text">
+            Powered by PedroPathing and precision dead-wheel odometry, maintaining a 90% target shooting accuracy.
+          </p>
+          <div class="inno-metric-bar">
+            <span class="metric-label">FIELD ACCURACY</span>
+            <span class="metric-val">90% HIT RATE</span>
+          </div>
+        </div>
+
+        <div class="inno-card" data-inno-index="2" data-tilt>
+          <div class="inno-laser-edge" aria-hidden="true"></div>
+          <div class="inno-bracket tl"></div>
+          <div class="inno-bracket br"></div>
+          <div class="inno-hud-header">
+            <span class="inno-code">SPEC.03 // TURRET</span>
+            <span class="inno-tag-pill">CLOSED-LOOP PID</span>
+          </div>
+          <div class="inno-card__icon-svg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+              <path d="M12 2l8 5v10l-8 5-8-5V7z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <h4 class="inno-card__title">Dual-Flywheel Turret</h4>
+          <p class="inno-card__text">
+            Gecko-wheel transfer feed with closed-loop PID flywheel motors and a dynamic servo-adjustable launch trajectory hood.
+          </p>
+          <div class="inno-metric-bar">
+            <span class="metric-label">TRACKING</span>
+            <span class="metric-val">360° RANGE</span>
+          </div>
+        </div>
+
+        <div class="inno-card" data-inno-index="3" data-tilt>
+          <div class="inno-laser-edge" aria-hidden="true"></div>
+          <div class="inno-bracket tl"></div>
+          <div class="inno-bracket br"></div>
+          <div class="inno-hud-header">
+            <span class="inno-code">SPEC.04 // HONORS</span>
+            <span class="inno-tag-pill">CANADA CUP</span>
+          </div>
+          <div class="inno-card__icon-svg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+              <path d="M12 2l3 7h7l-5.5 4.5 2 7-6.5-4.5-6.5 4.5 2-7L2 9h7z"/>
+            </svg>
+          </div>
+          <h4 class="inno-card__title">Design Award &amp; Canada Cup</h4>
+          <p class="inno-card__text">
+            Design Award honors at Lower Mainland Qualifiers and national invitation to compete at the Canada Cup.
+          </p>
+          <div class="inno-metric-bar">
+            <span class="metric-label">TIER</span>
+            <span class="metric-val">NATIONAL STAGE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engineering Specs Strip -->
+      <div class="specs-ribbon scroll-reveal">
+        <div class="spec-cell">
+          <span class="spec-cell__label">MASS</span>
+          <span class="spec-cell__value">12.0 KG</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-cell__label">DRIVETRAIN</span>
+          <span class="spec-cell__value">4-MOTOR BELT</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-cell__label">DEVELOPMENT</span>
+          <span class="spec-cell__value">13 WEEKS</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-cell__label">PATHING ENGINE</span>
+          <span class="spec-cell__value">PEDROPATHING</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-cell__label">TEAM IDENTITY</span>
+          <span class="spec-cell__value">FTC 23430</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SCENE 6: HIGHLIGHT VIDEOS
+       Record-Setting Match Footage
+       ========================================================================== -->
+  <section id="highlights" class="highlights-section">
+    <div class="section-container">
+      <div class="section-header scroll-reveal">
+        <p class="section-eyebrow">FIELD ARCHIVE // TOURNAMENT FOOTAGE</p>
+        <h2 class="section-title">Record Breaking <span class="text-gradient">Match Play</span></h2>
+        <p class="section-subtitle">
+          Watch Night Fury achieve the highest ball count scored by any FIRST Tech Challenge team in British Columbia history.
+        </p>
+      </div>
+
+      <!-- Video Player Hub with Instant 120 FPS Facade -->
+      <div class="video-theater reveal-item" id="video-theater-container">
+        <div class="video-wrapper" id="video-wrapper">
+          <div class="video-facade" id="video-facade">
+            <img
+              src="assets/images/video-thumb.jpg"
+              alt="Night Fury Record Match Footage"
+              class="video-facade__thumb"
+            >
+            <div class="video-facade__overlay">
+              <div class="video-facade__hud-top">
+                <span class="facade-chip"><span class="hud-status-led"></span> B.C. QUALIFIERS ARCHIVE</span>
+                <span class="facade-quality">4K 60FPS</span>
+              </div>
+              <button type="button" class="video-play-btn" id="play-video-btn" aria-label="Play Match Video">
+                <span class="play-btn-halo"></span>
+                <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+              <div class="video-facade__hud-bottom">
+                <span class="facade-prompt">CLICK TO PLAY MATCH TAPE</span>
+                <span class="facade-duration">PROVINCIAL RECORD &bull; NIGHT FURY</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="video-bar">
+          <div class="video-bar__info">
+            <span class="badge-record">PROVINCIAL RECORD</span>
+            <span class="video-bar__title">Most Balls Scored by a BC Team &bull; B.C. Qualifiers</span>
+          </div>
+          <div class="video-bar__meta">
+            <span>TEAM 23430 // NIGHT FURY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SCENE 7: "then social media and contact us"
+       Nanotech Contact Hub & Clean Vector Social Channels (No Emojis)
+       ========================================================================== -->
+  <section id="contact" class="contact-section">
+    <div class="section-container">
+      <div class="contact-grid">
+        
+        <!-- Left: Contact & Sponsorship -->
+        <div class="contact-card reveal-item">
+          <p class="section-eyebrow">COMMUNICATIONS // REACH OUT</p>
+          <h2 class="contact-title">Connect with <span class="text-gradient">Team 23430</span></h2>
+          <p class="contact-text">
+            For sponsorship inquiries, outreach events, engineering discussions, or robotics mentoring, 
+            reach out directly to our student leadership.
+          </p>
+
+          <div class="contact-email-pill">
+            <div class="email-details">
+              <span class="email-label">INBOX</span>
+              <span class="email-address">pmssroboticsclub@gmail.com</span>
+            </div>
+            <button type="button" id="copy-email-btn" class="copy-btn" aria-label="Copy Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+
+          <!-- Toast notification for copy action -->
+          <div id="copy-toast" class="copy-toast">
+            <span>Email copied to clipboard</span>
+          </div>
+
+          <div class="club-specs">
+            <div class="spec-row">
+              <span class="spec-k">Team Identity</span>
+              <span class="spec-v">PMR Phoenix (FTC 23430)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-k">Institution</span>
+              <span class="spec-v">Port Moody Secondary School, BC</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-k">Local Clock</span>
+              <span class="spec-v" id="live-time-pst">--:--:-- PST</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Official Channels (Clean Vector SVG Icons) -->
+        <div class="social-channels reveal-item">
+          <p class="section-eyebrow">DIGITAL CHANNELS</p>
+          <h3 class="social-heading">Follow The Journey</h3>
+          
+          <div class="social-links-list">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/portmoodyrobotics/" target="_blank" rel="noopener noreferrer" class="social-card">
+              <div class="social-card__icon instagram-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </div>
+              <div class="social-card__info">
+                <span class="social-card__title">Instagram</span>
+                <span class="social-card__handle">@portmoodyrobotics</span>
+                <span class="social-card__desc">Tournament updates, shop builds &amp; match media</span>
+              </div>
+              <div class="social-card__arrow">&rarr;</div>
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/in/robotics-club-pmss-372142285/" target="_blank" rel="noopener noreferrer" class="social-card">
+              <div class="social-card__icon linkedin-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </div>
+              <div class="social-card__info">
+                <span class="social-card__title">LinkedIn</span>
+                <span class="social-card__handle">Robotics Club PMSS</span>
+                <span class="social-card__desc">Corporate sponsorships &amp; engineering network</span>
+              </div>
+              <div class="social-card__arrow">&rarr;</div>
+            </a>
+
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/pmssrobotics" target="_blank" rel="noopener noreferrer" class="social-card">
+              <div class="social-card__icon facebook-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+              </div>
+              <div class="social-card__info">
+                <span class="social-card__title">Facebook</span>
+                <span class="social-card__handle">pmssrobotics</span>
+                <span class="social-card__desc">Community workshops, school demos &amp; news</span>
+              </div>
+              <div class="social-card__arrow">&rarr;</div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="section-container footer-content">
+      <div class="footer-left">
+        <img src="assets/images/logo.png" alt="PMR Logo" class="footer-logo">
+        <div>
+          <p class="footer-title">PORT MOODY ROBOTICS // TEAM 23430</p>
+          <p class="footer-copy">&copy; 2026 PMR Phoenix. All rights reserved.</p>
+        </div>
+      </div>
+      <div class="footer-right">
+        <p class="footer-designer">Engineered Exclusively for Team 1</p>
+        <p class="footer-sub">Designed by Aden Choi</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/lenis.min.js"></script>
+  <script type="module" src="js/viewer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
